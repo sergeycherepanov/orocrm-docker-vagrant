@@ -4,7 +4,7 @@ MAINTAINER Sergey Cherepanov <scherepanov@magecore.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install dependencies
-RUN apt-get update && apt-get -y upgrade && apt-get install -q -y vim wget curl nginx php5-fpm php5-cli php5-dev php5-mysql php5-curl php5-gd php5-mcrypt php5-sqlite php5-xmlrpc php5-xsl php5-common php5-intl php5-cli php-apc git mcrypt python-setuptools
+RUN apt-get update && apt-get -y upgrade && apt-get install -q -y vim wget curl nginx php5-fpm php5-cli php5-dev php5-mysql php5-curl php5-gd php5-mcrypt php5-sqlite php5-xmlrpc php5-xsl php5-common php5-intl php5-cli php-apc git mcrypt python-setuptools sudo cron
 
 RUN curl -sL https://deb.nodesource.com/setup | bash -
 RUN apt-get install -y nodejs npm
@@ -59,7 +59,6 @@ ADD ./OroRequirements.php /var/www/app/OroRequirements.php
 
 ADD ./conf/oro/parameters.yml /var/www/app/config/parameters.yml.tpl
 
-RUN mkdir -p /opb/bin
 ADD ./bin/bootstrap.sh /opt/bin/bootstrap.sh
 ADD ./bin/install.sh /opt/bin/install.sh
 RUN chmod 755 /opt/bin/install.sh
