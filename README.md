@@ -1,6 +1,6 @@
 # What is OroCRM?
 
-OroCRM the Open Source Customer Relationship Management (CRM) application.
+OroCRM is a OpenSource Customer Relationship Management (CRM) application.
 
 
 # How to use this image
