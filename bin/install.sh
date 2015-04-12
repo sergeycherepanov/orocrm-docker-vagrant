@@ -16,16 +16,21 @@ echo "Copying parameters.yml..."
 cp /var/www/app/config/parameters.yml.tpl /var/www/app/config/parameters.yml
 
 sed -i -e "s/%DB_HOST%/${OROCRM_DB_HOST}/g" /var/www/app/config/parameters.yml
+sed -i -e "s/%DB_PORT%/${OROCRM_DB_PORT}/g" /var/www/app/config/parameters.yml
 sed -i -e "s/%DB_USER%/${OROCRM_DB_USER}/g" /var/www/app/config/parameters.yml
 sed -i -e "s/%DB_PASSWORD%/${OROCRM_DB_PASSWORD}/g" /var/www/app/config/parameters.yml
 sed -i -e "s/%DB_NAME%/${OROCRM_DB_NAME}/g" /var/www/app/config/parameters.yml
 
 echo "Running installation process..."
 /usr/bin/php /var/www/app/console oro:install \
+--env prod \
 --organization-name="${OROCRM_ORGANIZATION_NAME}" \
 --user-name="${OROCRM_USER_NAME}" \
 --user-email="${OROCRM_USER_EMAIL}" \
 --user-firstname="${OROCRM_USER_FIRSTNAME}" \
 --user-lastname="${OROCRM_USER_LASTNAME}" \
 --user-password="${OROCRM_USER_PASSWORD}"
+
+echo "Configuring crontab..."
+echo "* * * * * /usr/bin/php /var/www/app/console oro:cron --env prod" > /usr/bin/crontab -u www-data
 
