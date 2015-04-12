@@ -13,7 +13,8 @@ OroCRM is a OpenSource Customer Relationship Management (CRM) application.
 
 The following environment variables are also require for configuring your OroCRM instance:
 
--	`-e OROCRM_DB_HOST=...` MySQL server host name or ip
+-	`-e OROCRM_HOSTNAME=...` Server hostname or ip
+-	`-e OROCRM_DB_HOST=...` MySQL server hostname or ip
 -	`-e OROCRM_DB_PORT=...` MySQL server post (if empty will be used 3306)
 -	`-e OROCRM_DB_USER=...` MySQL db username
 -	`-e OROCRM_DB_PASSWORD=...` MySQL db password (can be empty)
