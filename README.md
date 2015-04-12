@@ -11,7 +11,7 @@ OroCRM is a OpenSource Customer Relationship Management (CRM) application.
     [...] \
     scherepanov/orocrm
 
-The following environment variables are also require for configuring your OroCRM instance:
+The following environment variables are also required for configuring your OroCRM instance:
 
 -	`-e OROCRM_HOSTNAME=...` Server hostname or ip
 -	`-e OROCRM_DB_HOST=...` MySQL server hostname or ip
