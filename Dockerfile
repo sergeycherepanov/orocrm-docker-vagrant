@@ -22,12 +22,10 @@ RUN chmod 755 /opt/bin/bootstrap.sh && \
 chmod 755 /opt/bin/install-requirements.sh && \
 chmod 755 /opt/bin/prepare-configs.sh && \
 chmod 755 /opt/bin/download-orocrm.sh && \
-chmod 755 /opt/bin/install-orocrm.sh
-
-RUN /opt/bin/install-requirements.sh
-
-RUN /opt/bin/prepare-configs.sh
-RUN /opt/bin/download-orocrm.sh
+chmod 755 /opt/bin/install-orocrm.sh && \
+/opt/bin/install-requirements.sh && \
+/opt/bin/prepare-configs.sh && \
+/opt/bin/download-orocrm.sh
 
 EXPOSE 80 8080
 
