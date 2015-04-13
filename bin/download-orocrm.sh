@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Install OroCRM
+# Download OroCRM
 /usr/bin/wget -O /tmp/crm-application-1.6.1.tar.gz -N -P /tmp https://github.com/orocrm/crm-application/archive/1.6.1.tar.gz
 /bin/tar -zxf /tmp/crm-application-1.6.1.tar.gz -C /tmp 
 /bin/mv /tmp/crm-application-1.6.1 /var/www 
