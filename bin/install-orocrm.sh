@@ -16,7 +16,6 @@ fi
 echo "Copying parameters.yml..."
 sudo -u www-data /bin/bash -c "/bin/cp ${APP_ROOT}/app/config/parameters.yml.tpl ${APP_ROOT}/app/config/parameters.yml"
 
-
 sed -i -e "s/%DB_HOST%/${OROCRM_DB_HOST}/g" ${APP_ROOT}/app/config/parameters.yml
 sed -i -e "s/%DB_PORT%/${OROCRM_DB_PORT}/g" ${APP_ROOT}/app/config/parameters.yml
 sed -i -e "s/%DB_USER%/${OROCRM_DB_USER}/g" ${APP_ROOT}/app/config/parameters.yml
@@ -36,3 +35,4 @@ sudo -u www-data /bin/bash -c 'cd '${APP_ROOT}' && /usr/bin/php '${APP_ROOT}'/ap
 
 echo "Configuring crontab..."
 sudo -u www-data /bin/bash -c '/bin/echo "* * * * * /usr/bin/php '${APP_ROOT}'/app/console oro:cron --env prod" | /usr/bin/crontab'
+

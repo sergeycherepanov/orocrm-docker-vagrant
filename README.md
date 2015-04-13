@@ -4,11 +4,18 @@ OroCRM is a OpenSource Customer Relationship Management (CRM) application.
 
 
 # How to use this image
-
-    docker run -p 80:80 -p 8080:8080 \
-    -e OROCRM_DB_HOST=... \
-    -e OROCRM_DB_USER=... \
-    [...] \
+    
+    docker run -p 80:80 -p 8080:8080 -e OROCRM_DB_HOST="172.17.42.1" \
+    -e OROCRM_DB_USER="root" \
+    -e OROCRM_DB_PASSWORD="" \
+    -e OROCRM_DB_NAME="orocrm" \
+    -e OROCRM_USER_EMAIL="admin@example.com" \
+    -e OROCRM_USER_NAME="admin" \
+    -e OROCRM_USER_PASSWORD="admin1111" \
+    -e OROCRM_USER_FIRSTNAME="John" \
+    -e OROCRM_USER_LASTNAME="Doe" \
+    -e OROCRM_ORGANIZATION_NAME="Acme" \
+    -e OROCRM_HOSTNAME="orocrm.local" \
     scherepanov/orocrm
 
 The following environment variables are also require for configuring your OroCRM instance:
