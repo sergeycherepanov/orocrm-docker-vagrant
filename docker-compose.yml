@@ -1,0 +1,36 @@
+http:
+  hostname: http
+  image: scherepanov/orocrm-http:1.7.2
+  links:
+    - db
+    - websocket
+  ports:
+    - "80:80"
+  env_file:
+    - env/orocrm.yml
+websocket:
+  hostname: websocket
+  image: scherepanov/orocrm-ws:1.7.2
+  links:
+    - db
+  ports:
+    - "8080:8080"
+  env_file:
+    - env/orocrm.yml
+job:
+  hostname: job
+  image: orocrm/orocrm-job:1.7.2
+  links:
+    - db
+    - websocket
+  env_file:
+    - env/orocrm.yml
+db:
+  hostname: db
+  image: mysql:5.5
+  expose:
+    - 3306
+  environment:
+    - MYSQL_DATABASE=orocrm
+    - MYSQL_USER=orocrm
+    - MYSQL_PASSWORD=orocrm

@@ -102,32 +102,32 @@ class OroRequirements extends SymfonyRequirements
         #}
 
         // Web installer specific checks
-        if ('cli' !== PHP_SAPI) {
-            $output = $this->checkCliRequirements();
-
-            $requirement = new CliRequirement(
-                !$output,
-                'Requirements validation for PHP CLI',
-                'If you have multiple PHP versions installed, you need to configure ORO_PHP_PATH variable with PHP binary path used by web server'
-            );
-
-            $requirement->setOutput($output);
-
-            $this->add($requirement);
-        }
+//        if ('cli' !== PHP_SAPI) {
+//            $output = $this->checkCliRequirements();
+//
+//            $requirement = new CliRequirement(
+//                !$output,
+//                'Requirements validation for PHP CLI',
+//                'If you have multiple PHP versions installed, you need to configure ORO_PHP_PATH variable with PHP binary path used by web server'
+//            );
+//
+//            $requirement->setOutput($output);
+//
+//            $this->add($requirement);
+//        }
 
         $baseDir = realpath(__DIR__ . '/..');
-        $mem     = $this->getBytes(ini_get('memory_limit'));
+//        $mem     = $this->getBytes(ini_get('memory_limit'));
 
-        $this->addPhpIniRequirement(
-            'memory_limit',
-            function ($cfgValue) use ($mem) {
-                return $mem >= 512 * 1024 * 1024 || -1 == $mem;
-            },
-            false,
-            'memory_limit should be at least 512M',
-            'Set the "<strong>memory_limit</strong>" setting in php.ini<a href="#phpini">*</a> to at least "512M".'
-        );
+//        $this->addPhpIniRequirement(
+//            'memory_limit',
+//            function ($cfgValue) use ($mem) {
+//                return $mem >= 512 * 1024 * 1024 || -1 == $mem;
+//            },
+//            false,
+//            'memory_limit should be at least 512M',
+//            'Set the "<strong>memory_limit</strong>" setting in php.ini<a href="#phpini">*</a> to at least "512M".'
+//        );
 
         $jsEngine = RequireJSConfiguration::getDefaultJsEngine();
 
