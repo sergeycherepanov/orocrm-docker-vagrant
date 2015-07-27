@@ -2,6 +2,7 @@
 APP_ROOT="/var/www"
 
 # update parameters yml
+echo "Apply environment to ${APP_ROOT}/app/config/parameters.yml"
 sed -i -e "s/%DB_HOST%/${OROCRM_DB_HOST}/g" ${APP_ROOT}/app/config/parameters.yml
 sed -i -e "s/%DB_PORT%/${OROCRM_DB_PORT}/g" ${APP_ROOT}/app/config/parameters.yml
 sed -i -e "s/%DB_USER%/${OROCRM_DB_USER}/g" ${APP_ROOT}/app/config/parameters.yml
@@ -17,6 +18,7 @@ sed -i -e "s/%MAILER_PASSWORD%/${OROCRM_MAILER_PASSWORD}/g" ${APP_ROOT}/app/conf
 
 sed -i -e "s/%WEBSOCKET_HOST%/${OROCRM_WEBSOCKET_HOST}/g" ${APP_ROOT}/app/config/parameters.yml
 sed -i -e "s/%WEBSOCKET_PORT%/${OROCRM_WEBSOCKET_PORT}/g" ${APP_ROOT}/app/config/parameters.yml
+sed -i -e "s/%INSTALLED%/${OROCRM_INSTALLED}/g" ${APP_ROOT}/app/config/parameters.yml
 
 # start all the services
 /usr/local/bin/supervisord -n
