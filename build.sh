@@ -35,25 +35,58 @@ IMAGE_NAME_HTTP="${DOCKER_IMAGE_NAME_PREFIX}-http"
 IMAGE_NAME_WS="${DOCKER_IMAGE_NAME_PREFIX}-ws"
 
 # Checkout source code
-WORK_DIR=${DIR}/image-base/source
+SOURCE_DIR=/tmp/source
 GIT_DIR=/tmp/git
+WORKING_DIR=$(pwd)
 
-mkdir -p ${WORK_DIR}
+if [ -d ${GIT_DIR} ]; then
+  rm -rf ${GIT_DIR}
+fi
+
+mkdir -p ${SOURCE_DIR}
 mkdir -p ${GIT_DIR}
 
-# Checkout source code
-info "Checking-out sources..."
-git --work-tree=${WORK_DIR} --git-dir=${GIT_DIR} init
-git --work-tree=${WORK_DIR} --git-dir=${GIT_DIR} remote add origin ${GIT_REPOSITORY_URI}
-git --work-tree=${WORK_DIR} --git-dir=${GIT_DIR} fetch origin ${GIT_REPOSITORY_BRANCH}:${GIT_REPOSITORY_BRANCH}
-(git --work-tree=${WORK_DIR} --git-dir=${GIT_DIR} checkout -f ${GIT_REPOSITORY_BRANCH}); exitCode=$?
+cd ${GIT_DIR}
+git init
+git remote add origin ${GIT_REPOSITORY_URI}
+
+if [ 0 -eq $(expr match "${GIT_REPOSITORY_BRANCH}" "tags/") ];then
+    (git fetch origin ${GIT_REPOSITORY_BRANCH}); exitCode=$?
+else
+    (git fetch origin ${GIT_REPOSITORY_BRANCH}:${GIT_REPOSITORY_BRANCH}); exitCode=$?
+fi
+if [ 0 -lt ${exitCode} ]
+then
+  error "Can't fetch ${GIT_REPOSITORY_URI} ${GIT_REPOSITORY_BRANCH}"
+fi
+
+(git checkout -f ${GIT_REPOSITORY_BRANCH}); exitCode=$?
 if [ 0 -lt ${exitCode} ]
 then
   error "Can't checkout ${GIT_REPOSITORY_URI} ${GIT_REPOSITORY_BRANCH}"
 fi
+git submodule update --init
 
-baseImage=`echo "${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}" | sed -e 's/[\.\:\/&]/\\\\&/g'`
+# Export source code
+/usr/bin/python ${DIR}/git-archive-all $(find . -name ".*" -size 0  | while read -r line; do printf '%s ' '--extra '$line;done) /tmp/source.tar
+tar -xf /tmp/source.tar -C $(dirname ${SOURCE_DIR})
+# If is composer application
+if [ -f ${SOURCE_DIR}/composer.json ]; then
+    composer install --no-interaction --prefer-dist --optimize-autoloader -d ${SOURCE_DIR}; exitCode=$?
+    if [ 0 -lt ${exitCode} ]
+    then
+        error "Can't install composer packages"
+    fi
+    php ${DIR}/composer-map-env.php ${SOURCE_DIR}/composer.json
+else
+    error "${SOURCE_DIR}/composer.json not found!"
+fi
+cd ${WORKING_DIR}
+
+sudo mount --bind /tmp/source ${DIR}/image-base/source
+
 # Build base image
+baseImage=`echo "${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}" | sed -e 's/[\.\:\/&]/\\\\&/g'`
 info "Building ${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG} image"
 (docker build -t "${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}" "${DIR}/image-base"); exitCode=$?
 if [ 0 -lt ${exitCode} ]
@@ -86,6 +119,9 @@ then
   error "Can't build ${IMAGE_NAME_JOB}:${DOCKER_IMAGE_TAG}"
 fi
 
-rm ${DIR}/image-http/Dockerfile
-rm ${DIR}/image-ws/Dockerfile
-rm ${DIR}/image-job/Dockerfile
+# Cleanup
+sudo umount ${DIR}/image-base/source
+rm -f ${DIR}/image-http/Dockerfile
+rm -f ${DIR}/image-ws/Dockerfile
+rm -f ${DIR}/image-job/Dockerfile
+rm -f /tmp/*
