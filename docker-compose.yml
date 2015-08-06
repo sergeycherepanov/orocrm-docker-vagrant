@@ -31,7 +31,7 @@ websocket:
     - data
 job:
   hostname: job
-  image: orocrm/orocrm-job:1.7.4
+  image: scherepanov/orocrm-job:1.7.4
   links:
     - db
     - websocket

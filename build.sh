@@ -124,4 +124,4 @@ sudo umount ${DIR}/image-base/source
 rm -f ${DIR}/image-http/Dockerfile
 rm -f ${DIR}/image-ws/Dockerfile
 rm -f ${DIR}/image-job/Dockerfile
-rm -f /tmp/*
+rm -rf /tmp/*
