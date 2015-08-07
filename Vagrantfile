@@ -4,18 +4,10 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 2048
     v.cpus = 2
-    v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
+    # v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
   end
 
-  if Vagrant::Util::Platform.windows?
-    config.vm.synced_folder ".", "/vagrant"
-  else
-    config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ['rw', 'vers=3', 'tcp', 'fsc']
-    config.nfs.map_uid = Process.uid
-    config.nfs.map_gid = Process.gid
-  end
-
-  config.vm.network :public_network, :use_dhcp_assigned_default_route => true
+  # config.vm.network :public_network, :use_dhcp_assigned_default_route => true
   config.vm.network :private_network, ip: "192.168.58.101", auto_config: false
 
   config.hostmanager.enabled = true
