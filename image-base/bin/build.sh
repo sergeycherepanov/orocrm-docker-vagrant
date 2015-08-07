@@ -1,12 +1,11 @@
 #!/bin/bash
-echo "Building oro/crm-debian-base image..."
 export DEBIAN_FRONTEND=noninteractive
 USER="www-data"
 GROUP="www-data"
 MEMORY_LIMIT="512"
 UPLOAD_LIMIT="256"
 APP_ROOT="/var/www"
-chown ${USER} -R ${APP_ROOT}
+chown ${USER}:${GROUP} -R ${APP_ROOT}
 
 apt-get update
 apt-get -y upgrade

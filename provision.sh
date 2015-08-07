@@ -2,93 +2,12 @@
 
 #############################################################
 DIR=$(dirname $(readlink -f $0))
-MYSQL_ROOT_PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
 SYSTEMUSER=vagrant
 
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-
-
-sudo apt-get -y update
-
-# Install php5
-sudo apt-get install -y unzip python-software-properties mc php5-dev php5-cli php5-mysql php5-curl php5-gd php5-mcrypt
-sudo apt-get install -y php5-xmlrpc php5-xsl php5-common php5-intl php-pear php5-fpm
-sudo php5enmod mcrypt
-
-# Setup php5 cli options
-sudo sed -i -e "s/;date.timezone\s=/date.timezone = UTC/g" /etc/php5/cli/php.ini
-sudo sed -i -e "s/short_open_tag\s=\s*.*/short_open_tag = Off/g" /etc/php5/cli/php.ini
-sudo sed -i -e "s/memory_limit\s=\s.*/memory_limit = 512M/g" /etc/php5/cli/php.ini
-sudo sed -i -e "s/max_execution_time\s=\s.*/max_execution_time = 0/g" /etc/php5/cli/php.ini
-
-# Setup php5 fpm options
-sudo sed -i -e "s/;date.timezone\s=/date.timezone = UTC/g" /etc/php5/fpm/php.ini
-sudo sed -i -e "s/short_open_tag\s=\s*.*/short_open_tag = Off/g" /etc/php5/fpm/php.ini
-sudo sed -i -e "s/memory_limit\s=\s.*/memory_limit = 512M/g" /etc/php5/fpm/php.ini
-sudo sed -i -e "s/max_execution_time\s=\s.*/max_execution_time = 0/g" /etc/php5/fpm/php.ini
-
-sudo service php5-fpm restart
-
-# Install composer
-curl -s https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer.phar
-sudo ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
-
-# Add nginx repo
-add-apt-repository -y ppa:nginx/stable
-apt-get -q update
-apt-get -y install nginx
-
-rm -rf /var/www
-ln -s /vagrant/mgmt/web /var/www
-
-echo "server {
-        listen 80 default_server;
-        server_name mgmt.loc;
-        root /var/www;
-        index app.php;
-        access_log /var/log/nginx/\$host.access_log;
-        error_log /var/log/nginx/error_log info;
-        try_files \$uri \$uri/ @rewrite;
-        location @rewrite {
-            rewrite ^/(.*)\$ /app.php/\$1;
-        }
-        location ~ [^/]\.php(/|\$) {
-            fastcgi_split_path_info ^(.+?\.php)(/.*)\$;
-            if ( !-f \$document_root\$fastcgi_script_name) {
-                return 404;
-            }
-            fastcgi_index app.php;
-            fastcgi_read_timeout 10m;
-            fastcgi_pass unix:/var/run/php5-fpm.sock;
-            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-            include fastcgi_params;
-        }
-}" > /etc/nginx/sites-enabled/default
-
-sudo service nginx reload
-
-# Install MySQL
-echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWORD}" | sudo debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWORD}" | sudo debconf-set-selections
-echo "mysql-server mysql-server/remove_test_db false" | sudo debconf-set-selections
-
-sudo apt-get -qqy install mysql-server
-
-if [ "${SUDO_USER}" == "vagrant" ]; then
-  mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "SET PASSWORD = PASSWORD('');"
-else
-  echo "[client]
-user=root
-password=${MYSQL_ROOT_PASSWORD}" > ${USERHOME}/.my.cnf
-fi
-
-# Install node.js
-curl -sL https://deb.nodesource.com/setup | sudo bash -
-sudo apt-get install -qqy nodejs
 
 # Enable memory and swap accounting
 sed -i -e \

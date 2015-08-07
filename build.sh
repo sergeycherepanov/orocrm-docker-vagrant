@@ -30,8 +30,9 @@ DOCKER_IMAGE_NAME_PREFIX=$3
 DOCKER_IMAGE_TAG=$4
 
 IMAGE_NAME_BASE="${DOCKER_IMAGE_NAME_PREFIX}-base"
-IMAGE_NAME_JOB="${DOCKER_IMAGE_NAME_PREFIX}-job"
+IMAGE_NAME_DATA="${DOCKER_IMAGE_NAME_PREFIX}-data"
 IMAGE_NAME_HTTP="${DOCKER_IMAGE_NAME_PREFIX}-http"
+IMAGE_NAME_JOB="${DOCKER_IMAGE_NAME_PREFIX}-job"
 IMAGE_NAME_WS="${DOCKER_IMAGE_NAME_PREFIX}-ws"
 
 # Checkout source code
@@ -95,7 +96,15 @@ then
 fi
 
 # Build services
-info "Building HTTP service..."
+info "Building DATA container..."
+cat "${DIR}/image-data/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-data/Dockerfile"
+(docker build -t "${IMAGE_NAME_DATA}:${DOCKER_IMAGE_TAG}" "${DIR}/image-data"); exitCode=$?
+if [ 0 -lt ${exitCode} ]
+then
+  error "Can't build ${IMAGE_NAME_DATA}:${DOCKER_IMAGE_TAG}"
+fi
+
+info "Building HTTP container..."
 cat "${DIR}/image-http/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-http/Dockerfile"
 (docker build -t "${IMAGE_NAME_HTTP}:${DOCKER_IMAGE_TAG}" "${DIR}/image-http"); exitCode=$?
 if [ 0 -lt ${exitCode} ]
@@ -103,7 +112,7 @@ then
   error "Can't build ${IMAGE_NAME_HTTP}:${DOCKER_IMAGE_TAG}"
 fi
 
-info "Building WEBSOCKET service..."
+info "Building WEBSOCKET container..."
 cat "${DIR}/image-ws/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-ws/Dockerfile"
 (docker build -t "${IMAGE_NAME_WS}:${DOCKER_IMAGE_TAG}" "${DIR}/image-ws"); exitCode=$?
 if [ 0 -lt ${exitCode} ]
@@ -111,7 +120,7 @@ then
   error "Can't build ${IMAGE_NAME_WS}:${DOCKER_IMAGE_TAG}"
 fi
 
-info "Building JOB service..."
+info "Building JOB container..."
 cat "${DIR}/image-job/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-job/Dockerfile"
 (docker build -t "${IMAGE_NAME_JOB}:${DOCKER_IMAGE_TAG}" "${DIR}/image-job"); exitCode=$?
 if [ 0 -lt ${exitCode} ]

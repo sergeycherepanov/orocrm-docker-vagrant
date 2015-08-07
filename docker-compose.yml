@@ -1,11 +1,6 @@
 data:
   hostname: data
-  image: busybox
-  volumes:
-     - /var/www/app/cache
-     - /var/www/web/media
-     - /var/www/web/uploads
-     - /var/www/app/attachment
+  image: scherepanov/orocrm-data:1.7.4
 http:
   hostname: http
   image: scherepanov/orocrm-http:1.7.4
@@ -45,6 +40,7 @@ db:
   expose:
     - 3306
   environment:
+    - MYSQL_ROOT_PASSWORD=root
     - MYSQL_DATABASE=orocrm
     - MYSQL_USER=orocrm
     - MYSQL_PASSWORD=orocrm
