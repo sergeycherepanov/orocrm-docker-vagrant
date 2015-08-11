@@ -34,3 +34,9 @@ Example for build OroCRM community edition from github repository:
     docker-compose up
 
 If all docker containers started without errors, you can see web installer here: [http://orocrm.loc](http://orocrm.loc)
+
+#### Mysql credentials for install:
+host: db
+database: orocrm 
+user: orocrm 
+password: orocrm
