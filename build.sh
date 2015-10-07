@@ -1,5 +1,7 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
+export COMPOSER_PROCESS_TIMEOUT=3600
+
 DIR=$(dirname $(readlink -f $0))
 
 function info {
@@ -76,7 +78,7 @@ if [ -f ${SOURCE_DIR}/composer.json ]; then
     composer install --no-interaction --prefer-dist --optimize-autoloader -d ${SOURCE_DIR}; exitCode=$?
     if [ 0 -lt ${exitCode} ]
     then
-        error "Can't install composer packages"
+        error "Can't install dependencies"
     fi
     php ${DIR}/composer-map-env.php ${SOURCE_DIR}/composer.json
 else
@@ -84,6 +86,7 @@ else
 fi
 cd ${WORKING_DIR}
 
+mkdir -p /vagrant/image-base/source
 sudo mount --bind /tmp/source ${DIR}/image-base/source
 
 # Build base image
