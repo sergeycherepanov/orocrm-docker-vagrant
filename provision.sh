@@ -18,6 +18,9 @@ php5-xmlrpc php5-xsl php5-common php5-intl php-pear
 
 sudo php5enmod mcrypt
 
+# Ssh key verification
+sudo sed -i -e "s/#\s\s\sStrictHostKeyChecking ask/StrictHostKeyChecking no/g" /etc/ssh/ssh_config
+
 # Setup php5 cli options
 sudo sed -i -e "s/;date.timezone\s=/date.timezone = UTC/g" /etc/php5/cli/php.ini
 sudo sed -i -e "s/short_open_tag\s=\s*.*/short_open_tag = Off/g" /etc/php5/cli/php.ini

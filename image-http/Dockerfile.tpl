@@ -5,6 +5,8 @@ COPY bin /opt/bin
 COPY data/orocrm.conf      /etc/nginx/sites-enabled/orocrm.conf
 COPY data/supervisord.conf /etc/supervisord.conf
 
+RUN rm /etc/nginx/conf.d/default.conf
+
 VOLUME ["/var/www/app/cache", "/var/www/web/media", "/var/www/web/uploads", "/var/www/app/attachment"]
 
 EXPOSE 80

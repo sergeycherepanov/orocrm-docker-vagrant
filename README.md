@@ -1,6 +1,6 @@
-# Vagrant Box for OroCRM Docker Containers
+# OroCRM - Vagrant Box - Docker
 
-Vagrant box for build and run OroCRM in Docker Containers
+### Vagrant box for build and run OroCRM or another BAP in Docker Containers
 
 ## Prepare Vagrant Environment
 
