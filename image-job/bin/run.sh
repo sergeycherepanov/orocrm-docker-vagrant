@@ -4,6 +4,8 @@ APP_ROOT="/var/www"
 # update parameters yml
 sudo -u www-data -E composer run-script post-install-cmd -n -d ${APP_ROOT};
 
+/bin/bash /opt/bin/wait-install.sh
+
 # start all the services
-/usr/local/bin/supervisord -n
+exec /usr/local/bin/supervisord -n
 

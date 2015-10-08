@@ -18,15 +18,23 @@ Install Vagrant plugins:
 
     vagrant up && vagrant ssh
 
-### Build docker images
+### Build docker images from source
 
 You can try to use any [BAP](https://github.com/orocrm/platform) application source code for build docker containers. But I tested it only with OroCRM CE.
 
-    /vagrant/build.sh <git repository uri> <branchname or tags/tagname> <image name> <image tag>
+    /vagrant/build.sh <git repository uri> <branchname or tags/tagname> <image name prefix> <image tag>
 
 Example for build OroCRM community edition from github repository:
 
-    /vagrant/build.sh https://github.com/orocrm/crm-application.git tags/1.7.4 scherepanov/orocrm 1.7.4
+    /vagrant/build.sh https://github.com/orocrm/crm-application.git tags/1.8.0 scherepanov/orocrm 1.8.0
+
+### Generate docker-compose.yml for yout images
+
+    /vagrant/compose-config.sh <image name prefix> <image tag>
+
+For example:
+
+    /vagrant/compose-config.sh scherepanov/orocrm 1.8.0
 
 ### Run containers
 

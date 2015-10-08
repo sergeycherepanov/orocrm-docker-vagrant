@@ -1,9 +1,9 @@
 data:
   hostname: data
-  image: scherepanov/orocrm-data:1.7.4
+  image: %IMAGE_PREFIX%-data:%IMAGE_TAG%
 http:
   hostname: http
-  image: scherepanov/orocrm-http:1.7.4
+  image: %IMAGE_PREFIX%-http:%IMAGE_TAG%
   links:
     - db
     - websocket
@@ -15,7 +15,7 @@ http:
     - data
 websocket:
   hostname: websocket
-  image: scherepanov/orocrm-ws:1.7.4
+  image: %IMAGE_PREFIX%-ws:%IMAGE_TAG%
   links:
     - db
   ports:
@@ -26,7 +26,7 @@ websocket:
     - data
 job:
   hostname: job
-  image: scherepanov/orocrm-job:1.7.4
+  image: %IMAGE_PREFIX%-job:%IMAGE_TAG%
   links:
     - db
     - websocket

@@ -5,5 +5,5 @@ APP_ROOT="/var/www"
 sudo -u www-data -E composer run-script post-install-cmd -n -d ${APP_ROOT};
 
 # start all the services
-/usr/local/bin/supervisord -n
+exec /usr/local/bin/supervisord -n
 

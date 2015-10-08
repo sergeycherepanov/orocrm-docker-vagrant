@@ -10,7 +10,7 @@ function info {
 function note {
     printf "\033[0;33m${1}\033[0m \n"
 }
-function sucess {
+function success {
     printf "\033[0;32m${1}\033[0m \n"
 }
 function warning {
@@ -133,7 +133,7 @@ fi
 
 # Cleanup
 sudo umount ${DIR}/image-base/source
-rm -f ${DIR}/image-http/Dockerfile
-rm -f ${DIR}/image-ws/Dockerfile
-rm -f ${DIR}/image-job/Dockerfile
+#rm -f ${DIR}/image-http/Dockerfile
+#rm -f ${DIR}/image-ws/Dockerfile
+#rm -f ${DIR}/image-job/Dockerfile
 rm -rf /tmp/*
