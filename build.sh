@@ -95,5 +95,5 @@ then
 fi
 
 # Cleanup
-sudo umount ${DIR}/image/source
+sudo umount -f ${DIR}/image/source
 rm -rf ${TMP_DIR}

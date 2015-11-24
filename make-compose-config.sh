@@ -29,5 +29,8 @@ IMAGE_TAG=$2
 COMPOSE_TPL=`cat ${DIR}/docker-compose.yml.tpl`
 COMPOSE_TPL=${COMPOSE_TPL//%IMAGE_PREFIX%/${IMAGE_PREFIX}}
 COMPOSE_TPL=${COMPOSE_TPL//%IMAGE_TAG%/${IMAGE_TAG}}
+
+echo "${COMPOSE_TPL}" > ${DIR}/docker-compose.yml
+
 success "Compose config ${DIR}/docker-compose.yml saved!"
 note "Run: \"docker-compose up\" to start services "
