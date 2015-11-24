@@ -10,7 +10,7 @@ else exit 1; fi \
 && rm /etc/nginx/conf.d/default.conf
 
 COPY data/nginx.conf          /etc/nginx/nginx.conf
-COPY data/orocrm.conf         /etc/nginx/sites-enabled/orocrm.conf
+COPY data/nginx-orocrm.conf   /etc/nginx/sites-enabled/orocrm.conf
 COPY data/supervisord.conf    /etc/supervisord.conf
 
 RUN mkdir -p /var/www/app/cache && chown www-data:www-data /var/www/app/cache && \
