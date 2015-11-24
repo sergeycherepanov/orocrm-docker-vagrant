@@ -1,6 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER SergeyCherepanov <sergey@cherepanov.org.ua>
 
+COPY source                   /var/www
 COPY bin                      /opt/bin
 COPY data/OroRequirements.php /tmp/OroRequirements.php
 
@@ -13,7 +14,6 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY data/nginx.conf          /etc/nginx/nginx.conf
 COPY data/orocrm.conf         /etc/nginx/sites-enabled/orocrm.conf
 COPY data/supervisord.conf    /etc/supervisord.conf
-COPY source                   /var/www
 
 RUN mkdir -p /var/www/app/cache && chown www-data:www-data /var/www/app/cache && \
 mkdir -p /var/www/web/media && chown www-data:www-data /var/www/web/media && \
