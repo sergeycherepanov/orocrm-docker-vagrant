@@ -1,14 +1,15 @@
 FROM ubuntu:14.04
 MAINTAINER SergeyCherepanov <sergey@cherepanov.org.ua>
 
+COPY bin                      /opt/bin
+COPY data/OroRequirements.php /tmp/OroRequirements.php
+
 RUN chmod +x /opt/bin/* && sleep 1 && if /opt/bin/build.sh; then \
 sleep 1 && rm -f /opt/bin/build.sh; \
 else exit 1; fi
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY bin                      /opt/bin
-COPY data/OroRequirements.php /tmp/OroRequirements.php
 COPY data/nginx.conf          /etc/nginx/nginx.conf
 COPY data/orocrm.conf         /etc/nginx/sites-enabled/orocrm.conf
 COPY data/supervisord.conf    /etc/supervisord.conf

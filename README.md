@@ -27,7 +27,7 @@ But it's tested only with OroCRM
 
 Example: build OroCRM community edition from official repository:
 
-    /vagrant/build.sh https://github.com/orocrm/crm-application.git tags/1.8.0 orocrm 1.8.0
+    /vagrant/build.sh git@github.com:orocrm/crm-application.git tags/1.8.0 orocrm 1.8.0
 
 ### Generate docker-compose.yml for your images
 
