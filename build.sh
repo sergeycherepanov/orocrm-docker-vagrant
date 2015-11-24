@@ -28,18 +28,14 @@ fi
 
 GIT_REPOSITORY_URI=$1
 GIT_REPOSITORY_BRANCH=$2
-DOCKER_IMAGE_NAME_PREFIX=$3
+DOCKER_IMAGE_NAME=$3
 DOCKER_IMAGE_TAG=$4
+IMAGE_NAME="${DOCKER_IMAGE_NAME}"
 
-IMAGE_NAME_BASE="${DOCKER_IMAGE_NAME_PREFIX}-base"
-IMAGE_NAME_DATA="${DOCKER_IMAGE_NAME_PREFIX}-data"
-IMAGE_NAME_HTTP="${DOCKER_IMAGE_NAME_PREFIX}-http"
-IMAGE_NAME_JOB="${DOCKER_IMAGE_NAME_PREFIX}-job"
-IMAGE_NAME_WS="${DOCKER_IMAGE_NAME_PREFIX}-ws"
-
+TMP_DIR=/tmp/docker-bap
 # Checkout source code
-SOURCE_DIR=/tmp/source
-GIT_DIR=/tmp/git
+SOURCE_DIR=${TMP_DIR}/source
+GIT_DIR=${TMP_DIR}/git
 WORKING_DIR=$(pwd)
 
 if [ -d ${GIT_DIR} ]; then
@@ -71,8 +67,8 @@ fi
 git submodule update --init
 
 # Export source code
-/usr/bin/python ${DIR}/git-archive-all $(find . -name ".*" -size 0  | while read -r line; do printf '%s ' '--extra '$line;done) /tmp/source.tar
-tar -xf /tmp/source.tar -C $(dirname ${SOURCE_DIR})
+/usr/bin/python ${DIR}/git-archive-all $(find . -name ".*" -size 0  | while read -r line; do printf '%s ' '--extra '$line;done) ${TMP_DIR}/source.tar
+tar -xf ${TMP_DIR}/source.tar -C $(dirname ${SOURCE_DIR})
 # If is composer application
 if [ -f ${SOURCE_DIR}/composer.json ]; then
     composer install --no-interaction --prefer-dist --optimize-autoloader -d ${SOURCE_DIR}; exitCode=$?
@@ -84,56 +80,20 @@ if [ -f ${SOURCE_DIR}/composer.json ]; then
 else
     error "${SOURCE_DIR}/composer.json not found!"
 fi
+
 cd ${WORKING_DIR}
 
-mkdir -p /vagrant/image-base/source
-sudo mount --bind /tmp/source ${DIR}/image-base/source
+mkdir -p ${DIR}/image/source
+sudo mount --bind ${TMP_DIR}/source ${DIR}/image/source
 
-# Build base image
-baseImage=`echo "${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}" | sed -e 's/[\.\:\/&]/\\\\&/g'`
-info "Building ${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG} image"
-(docker build -t "${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}" "${DIR}/image-base"); exitCode=$?
+# Build image
+info "Building ${IMAGE_NAME}:${DOCKER_IMAGE_TAG} image"
+(docker build -t "${IMAGE_NAME}:${DOCKER_IMAGE_TAG}" "${DIR}/image"); exitCode=$?
 if [ 0 -lt ${exitCode} ]
 then
-  error "Can't build ${IMAGE_NAME_BASE}:${DOCKER_IMAGE_TAG}"
-fi
-
-# Build services
-info "Building DATA container..."
-cat "${DIR}/image-data/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-data/Dockerfile"
-(docker build -t "${IMAGE_NAME_DATA}:${DOCKER_IMAGE_TAG}" "${DIR}/image-data"); exitCode=$?
-if [ 0 -lt ${exitCode} ]
-then
-  error "Can't build ${IMAGE_NAME_DATA}:${DOCKER_IMAGE_TAG}"
-fi
-
-info "Building HTTP container..."
-cat "${DIR}/image-http/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-http/Dockerfile"
-(docker build -t "${IMAGE_NAME_HTTP}:${DOCKER_IMAGE_TAG}" "${DIR}/image-http"); exitCode=$?
-if [ 0 -lt ${exitCode} ]
-then
-  error "Can't build ${IMAGE_NAME_HTTP}:${DOCKER_IMAGE_TAG}"
-fi
-
-info "Building WEBSOCKET container..."
-cat "${DIR}/image-ws/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-ws/Dockerfile"
-(docker build -t "${IMAGE_NAME_WS}:${DOCKER_IMAGE_TAG}" "${DIR}/image-ws"); exitCode=$?
-if [ 0 -lt ${exitCode} ]
-then
-  error "Can't build ${IMAGE_NAME_WS}:${DOCKER_IMAGE_TAG}"
-fi
-
-info "Building JOB container..."
-cat "${DIR}/image-job/Dockerfile.tpl" | sed -e 's/%FROM%/'${baseImage}'/g' > "${DIR}/image-job/Dockerfile"
-(docker build -t "${IMAGE_NAME_JOB}:${DOCKER_IMAGE_TAG}" "${DIR}/image-job"); exitCode=$?
-if [ 0 -lt ${exitCode} ]
-then
-  error "Can't build ${IMAGE_NAME_JOB}:${DOCKER_IMAGE_TAG}"
+  error "Can't build ${IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
 fi
 
 # Cleanup
-sudo umount ${DIR}/image-base/source
-#rm -f ${DIR}/image-http/Dockerfile
-#rm -f ${DIR}/image-ws/Dockerfile
-#rm -f ${DIR}/image-job/Dockerfile
-rm -rf /tmp/*
+sudo umount ${DIR}/image/source
+rm -rf ${TMP_DIR}

@@ -66,9 +66,6 @@ sed -i -e"s/keepalive_timeout\s*65/keepalive_timeout 2/" /etc/nginx/nginx.conf
 sed -i -e"s/keepalive_timeout 2/keepalive_timeout 2;\n\tclient_max_body_size ${UPLOAD_LIMIT}m/" /etc/nginx/nginx.conf
 echo "daemon off;" >> /etc/nginx/nginx.conf
 
-mkdir /etc/nginx/sites-enabled
-mv /tmp/nginx.conf /etc/nginx/nginx.conf
-
 # Apply fixed OroRequirements for aufs support
 mv /tmp/OroRequirements.php ${APP_ROOT}/app/OroRequirements.php
 chown ${USER}:${GROUP} ${APP_ROOT}/app/OroRequirements.php
