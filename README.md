@@ -31,11 +31,11 @@ Example: build OroCRM community edition from official repository:
 
 ### Generate docker-compose.yml for your images
 
-    /vagrant/compose-config.sh <image name prefix> <image tag>
+    /vagrant/make-compose-config.sh <image name prefix> <image tag>
 
 Example:
 
-    /vagrant/compose-config.sh orocrm 1.8.0
+    /vagrant/make-compose-config.sh orocrm 1.8.0
 
 ### Run containers
 
