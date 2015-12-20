@@ -20,12 +20,11 @@ Install Vagrant plugins:
 
 ### Build docker images from your source
 
-You can try to build containers from any [BAP](https://github.com/orocrm/platform) application source code.
-But it's tested only with OroCRM
+For build docker image you can use a source code of empty [Application](https://github.com/orocrm/platform-application) or BAP based application, like [OroCRM](https://github.com/orocrm/crm-application) or [OroCommerce](https://github.com/orocommerce/orocommerce-application).
 
     /vagrant/build.sh <git repository uri> <branchname or tags/tagname> <image name prefix> <image tag>
 
-Example: build OroCRM community edition from official repository:
+Example: build docker image of OroCRM Community Edition from official repository:
 
     /vagrant/build.sh git@github.com:orocrm/crm-application.git tags/1.8.0 orocrm 1.8.0
 
