@@ -17,9 +17,19 @@ Install Vagrant plugins:
 #### Start vagrant and login via ssh
 
     vagrant up && vagrant ssh
+    
+### Generate SSH keys
 
-### Build docker images from your source
+For checkout sources you need to generate ssh keys. Run command below  and follow instructions:
 
+    ssh-keygen -t rsa -f /home/vagrant/.ssh/id_rsa
+    
+When key will be generated, you need to add public key into your github account. For get public key run:
+
+    cat /home/vagrant/.ssh/id_rsa.pub
+
+### Build docker images from your source code
+    
 For build docker image you can use source code of [Empty Application](https://github.com/orocrm/platform-application), or any BAP based application ([OroCRM](https://github.com/orocrm/crm-application), [OroCommerce](https://github.com/orocommerce/orocommerce-application), etc).
 
     /vagrant/build.sh <git repository uri> <branchname or tags/tagname> <image name prefix> <image tag>

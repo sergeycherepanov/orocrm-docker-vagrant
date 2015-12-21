@@ -2,16 +2,14 @@
 export DEBIAN_FRONTEND=noninteractive
 USER="www-data"
 GROUP="www-data"
-MEMORY_LIMIT="512"
+MEMORY_LIMIT="1024"
 UPLOAD_LIMIT="256"
-APP_ROOT="/var/www"
-chown ${USER}:${GROUP} -R ${APP_ROOT}
 
-apt-get update
-apt-get -y upgrade
+apt-get -qy update
+apt-get -qqy upgrade
 
 # install base packages
-apt-get install -q -y vim sudo wget curl php5-fpm php5-cli php5-dev \
+apt-get install -qqy vim sudo wget curl php5-fpm php5-cli php5-dev \
 php5-mysql php5-curl php5-gd php5-mcrypt php5-sqlite php5-xmlrpc \
 php5-xsl php5-common php5-intl php5-cli php-apc git mcrypt \
 python-setuptools procps
@@ -21,7 +19,7 @@ wget -O - http://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 echo "deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx" >> /etc/apt/sources.list
 echo "deb-src http://nginx.org/packages/mainline/ubuntu/ trusty nginx" >> /etc/apt/sources.list
 
-apt-get -y update
+apt-get -qy update
 apt-get install -qqy --reinstall nginx
 
 # install composer
@@ -30,13 +28,11 @@ mv composer.phar /usr/local/bin/composer
 
 # install node.js
 curl -sL https://deb.nodesource.com/setup | bash -
-apt-get install -y nodejs
+apt-get install -qqy nodejs
 
 # install supervisor
 easy_install supervisor
 easy_install supervisor-stdout
-easy_install pip
-pip install  supervisor-logging
 
 # configure php cli
 sed -i -e "s/;date.timezone\s=/date.timezone = UTC/g" /etc/php5/cli/php.ini
@@ -65,8 +61,4 @@ php5enmod mcrypt
 sed -i -e"s/keepalive_timeout\s*65/keepalive_timeout 2/" /etc/nginx/nginx.conf
 sed -i -e"s/keepalive_timeout 2/keepalive_timeout 2;\n\tclient_max_body_size ${UPLOAD_LIMIT}m/" /etc/nginx/nginx.conf
 echo "daemon off;" >> /etc/nginx/nginx.conf
-
-# Apply fixed OroRequirements for aufs support
-mv /tmp/OroRequirements.php ${APP_ROOT}/app/OroRequirements.php
-chown ${USER}:${GROUP} ${APP_ROOT}/app/OroRequirements.php
 

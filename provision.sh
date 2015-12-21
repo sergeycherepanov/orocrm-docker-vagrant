@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #############################################################
-DIR=$(dirname $(readlink -f $0))
-SYSTEMUSER=vagrant
+cd `dirname $0` && DIR=$(pwd) && cd -
+SYSTEMUSER=${1-vagrant}
 
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8

@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR=$(dirname $(readlink -f $0))
+cd `dirname $0` && DIR=$(pwd) && cd -
 
 function info {
     printf "\033[0;36m${1}\033[0m \n"
@@ -19,14 +19,14 @@ function error {
 }
 
 if [ -z $1 ] || [ -z $2 ]; then
-  info "usage: $0 <image name prefix> <image tag>"
+  info "usage: $0 <image name> <image tag>"
   exit 1
 fi
 
 IMAGE_PREFIX=$1
 IMAGE_TAG=$2
 
-COMPOSE_TPL=`cat ${DIR}/docker-compose.yml.tpl`
+COMPOSE_TPL=`cat ${DIR}/docker-compose.tpl.yml`
 COMPOSE_TPL=${COMPOSE_TPL//%IMAGE_PREFIX%/${IMAGE_PREFIX}}
 COMPOSE_TPL=${COMPOSE_TPL//%IMAGE_TAG%/${IMAGE_TAG}}
 
