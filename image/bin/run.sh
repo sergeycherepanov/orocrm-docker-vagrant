@@ -22,7 +22,7 @@ fi
 
 # Clean exists folders
 [[ -d ${APP_ROOT}/app/config ]]     && rm -r ${APP_ROOT}/app/config
-[[ -d ${APP_ROOT}/app/config ]]     && rm -r ${APP_ROOT}/app/cache
+[[ -d ${APP_ROOT}/app/cache ]]      && rm -r ${APP_ROOT}/app/cache
 [[ -d ${APP_ROOT}/web/media ]]      && rm -r ${APP_ROOT}/web/media
 [[ -d ${APP_ROOT}/web/uploads ]]    && rm -r ${APP_ROOT}/web/uploads
 [[ -d ${APP_ROOT}/app/attachment ]] && rm -r ${APP_ROOT}/app/attachment
