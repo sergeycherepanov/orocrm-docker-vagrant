@@ -64,9 +64,12 @@ git submodule update --init
 # Export source code
 /usr/bin/python ${DIR}/git-archive-all $(find . -name ".*" -size 0  | while read -r line; do printf '%s ' '--extra '$line;done) ${TMP_DIR}/source.tar
 tar -xf ${TMP_DIR}/source.tar -C $(dirname ${SOURCE_DIR})
+
 # If is composer application
 if [ -f ${SOURCE_DIR}/composer.json ]; then
     composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader -d ${SOURCE_DIR} || error "Can't install dependencies"
+
+    # Map environment variables
     php ${DIR}/composer-map-env.php ${SOURCE_DIR}/composer.json
 else
     error "${SOURCE_DIR}/composer.json not found!"
@@ -99,8 +102,11 @@ fi
 
 # Copy source code
 ID=$(docker run -d -v "${DIR}/image/OroRequirements.php:/OroRequirements.php" -v "${SOURCE_DIR}:/source" -v "${DIR}/image/bin:/optbin" "${BASE_IMAGE_NAME}" bash -c "cp -r /optbin /opt/bin && chmod +x /opt/bin/* && cp -r /source /var/www && cp /OroRequirements.php /var/www/app/OroRequirements.php && chown -R www-data:www-data /var/www")
-docker wait ${ID}
-docker commit -c 'CMD ["/bin/bash", "/opt/bin/run.sh"]' ${ID} ${IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+if [ 0 -eq $(docker wait ${ID}) ]; then
+    docker commit -c 'CMD ["/bin/bash", "/opt/bin/run.sh"]' ${ID} ${IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+else
+    error "Can't build ${BASE_IMAGE_NAME}"
+fi
 
 # Cleanup
 rm -rf ${TMP_DIR}

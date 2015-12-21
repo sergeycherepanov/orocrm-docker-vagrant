@@ -11,21 +11,21 @@ DATA_ROOT="/srv/app-data"
 [[ -d ${DATA_ROOT}/attachment ]]     || sudo -u www-data mkdir -p ${DATA_ROOT}/attachment
 
 # Checking if first run
-if [ ! -f ${DATA_ROOT}/config/parameters.yml ]
+if [ 0 -eq $(ls ${DATA_ROOT}/config/ | wc -l) ]
 then
     # Generate parameters.yml
-    # sudo -u www-data -E composer run-script post-install-cmd -n -d ${APP_ROOT};
+    sudo -u www-data -E composer run-script post-install-cmd -n -d ${APP_ROOT};
 
     # Copy configs
     sudo -u www-data cp -r ${APP_ROOT}/app/config/* ${DATA_ROOT}/config/
 fi
 
 # Clean exists folders
-rm -r ${APP_ROOT}/app/config
-rm -r ${APP_ROOT}/app/cache
-rm -r ${APP_ROOT}/app/cache
-rm -r ${APP_ROOT}/web/uploads
-rm -r ${APP_ROOT}/app/attachment
+[[ -d ${APP_ROOT}/app/config ]]     && rm -r ${APP_ROOT}/app/config
+[[ -d ${APP_ROOT}/app/config ]]     && rm -r ${APP_ROOT}/app/cache
+[[ -d ${APP_ROOT}/web/media ]]      && rm -r ${APP_ROOT}/web/media
+[[ -d ${APP_ROOT}/web/uploads ]]    && rm -r ${APP_ROOT}/web/uploads
+[[ -d ${APP_ROOT}/app/attachment ]] && rm -r ${APP_ROOT}/app/attachment
 
 # Linking persistent data
 sudo -u www-data ln -s ${DATA_ROOT}/config      ${APP_ROOT}/app/config
