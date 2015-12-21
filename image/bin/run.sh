@@ -34,6 +34,15 @@ sudo -u www-data ln -s ${DATA_ROOT}/media       ${APP_ROOT}/web/media
 sudo -u www-data ln -s ${DATA_ROOT}/uploads     ${APP_ROOT}/web/uploads
 sudo -u www-data ln -s ${DATA_ROOT}/attachment  ${APP_ROOT}/app/attachment
 
+# If already installed
+if [ -f /var/www/app/config/parameters.yml ] && [ 0 -lt `cat /var/www/app/config/parameters.yml | grep ".*installed:\s*[\']\{0,1\}[a-zA-Z0-9\:\+\-]\{1,\}[\']\{0,1\}" | grep -v "null" | wc -l` ]
+then
+    echo "Running application..."
+    cd ${APP_ROOT}
+    rm -r ${APP_ROOT}/app/cache/*
+    sudo -u www-data ${APP_ROOT}/app/console --env=prod oro:platform:update --force
+fi
+
 # Starting services
 exec /usr/local/bin/supervisord -n
 
