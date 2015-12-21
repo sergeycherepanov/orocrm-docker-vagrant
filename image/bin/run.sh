@@ -10,7 +10,7 @@ DATA_ROOT="/srv/app-data"
 [[ -d ${DATA_ROOT}/uploads ]]        || sudo -u www-data mkdir -p ${DATA_ROOT}/uploads
 [[ -d ${DATA_ROOT}/attachment ]]     || sudo -u www-data mkdir -p ${DATA_ROOT}/attachment
 
-# Checking if first run
+# If it's the first run
 if [ 0 -eq $(ls ${DATA_ROOT}/config/ | wc -l) ]
 then
     # Generate parameters.yml
