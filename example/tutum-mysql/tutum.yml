@@ -14,8 +14,8 @@ orocrm:
   links:
     - "db"
   ports:
-    - "80"
-    - "8080"
+    - "80:80"
+    - "8080:8080"
   volumes_from:
     - data
   environment:
