@@ -22,7 +22,7 @@ function error {
 }
 
 if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ]; then
-  info "usage: $0 <git-uri> <git-ref> <image-name> <image-tag>"
+  info "usage: $0 <git-uri> <git-ref> <image-name> <image-tag> [base-image-name]"
   exit 1
 fi
 
@@ -30,7 +30,7 @@ GIT_REPOSITORY_URI=$1
 GIT_REPOSITORY_BRANCH=$2
 DOCKER_IMAGE_NAME=$3
 DOCKER_IMAGE_TAG=$4
-BASE_IMAGE_NAME="bap-base-system"
+BASE_IMAGE_NAME=${5-"bap-base-system"}
 IMAGE_NAME="${DOCKER_IMAGE_NAME}"
 
 TMP_DIR=/tmp/docker-bap

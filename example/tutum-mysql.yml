@@ -1,0 +1,37 @@
+db:
+  image: mysql:5.5
+  expose:
+    - "3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=orocrm
+    - MYSQL_USER=orocrm
+    - MYSQL_PASSWORD=orocrm
+data:
+  image: scherepanov/orocrm-data
+orocrm:
+  image: scherepanov/orocrm:1.8.2
+  links:
+    - "db"
+  ports:
+    - "80"
+    - "8080"
+  volumes_from:
+    - data
+  environment:
+    - APP_DB_DRIVER=pdo_mysql
+    - APP_DB_HOST=db
+    - APP_DB_PORT=3306
+    - APP_DB_USER=orocrm
+    - APP_DB_PASSWORD=orocrm
+    - APP_DB_NAME=orocrm
+    - APP_HOSTNAME=localhost
+    - APP_MAILER_TRANSPORT=smtp
+    - APP_MAILER_HOST=127.0.0.1
+    - APP_MAILER_PORT=
+    - APP_MAILER_ENCRYPTION=
+    - APP_MAILER_USER=
+    - APP_MAILER_PASSWORD=
+    - APP_WEBSOCKET_HOST=
+    - APP_WEBSOCKET_PORT=8080
+    - APP_IS_INSTALLED=
