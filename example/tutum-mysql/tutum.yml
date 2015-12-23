@@ -9,7 +9,8 @@ db:
     - MYSQL_PASSWORD=orocrm
 data:
   image: scherepanov/orocrm-data
-orocrm:
+  command: while : ; do sleep 1; done
+web:
   image: scherepanov/orocrm:1.8.2
   links:
     - "db"
