@@ -1,3 +1,6 @@
+data:
+  image: scherepanov/orocrm-data
+  command: "sh -c 'while : ; do sleep 1; done'"
 db:
   image: mysql:5.5
   expose:
@@ -7,13 +10,20 @@ db:
     - MYSQL_DATABASE=orocrm
     - MYSQL_USER=orocrm
     - MYSQL_PASSWORD=orocrm
-data:
-  image: scherepanov/orocrm-data
-  command: "sh -c 'while : ; do sleep 1; done'"
+  volumes_from:
+    - data
+mail:
+  image: catatnight/postfix
+  expose:
+    - "25"
+  environment:
+    - maildomain=localhost
+    - smtp_user=user@localhost:password
 web:
   image: scherepanov/orocrm:1.8.2
   links:
     - "db"
+    - "mail"
   ports:
     - "80:80"
     - "8080:8080"
@@ -28,11 +38,11 @@ web:
     - APP_DB_NAME=orocrm
     - APP_HOSTNAME=localhost
     - APP_MAILER_TRANSPORT=smtp
-    - APP_MAILER_HOST=127.0.0.1
-    - APP_MAILER_PORT=
+    - APP_MAILER_HOST=mail
+    - APP_MAILER_PORT=25
     - APP_MAILER_ENCRYPTION=
-    - APP_MAILER_USER=
-    - APP_MAILER_PASSWORD=
+    - APP_MAILER_USER=user
+    - APP_MAILER_PASSWORD=password
     - APP_WEBSOCKET_HOST=
     - APP_WEBSOCKET_PORT=8080
     - APP_IS_INSTALLED=
