@@ -24,7 +24,7 @@ For checkout sources you need to generate ssh keys. Run command below and follow
 
     ssh-keygen -t rsa -f /home/vagrant/.ssh/id_rsa
     
-When the key will be generated, you need to add public a key into your github account. To get a key run the command:
+When the key will be generated, you need to add public key into your github account. To get a key run the command:
 
     cat /home/vagrant/.ssh/id_rsa.pub
 
