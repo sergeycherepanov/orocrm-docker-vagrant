@@ -42,7 +42,7 @@ if [[ -z ${APP_DB_PORT} ]]; then
     fi
 fi
 
-until nc -z ${APP_DB_HOST} ${APP_DB_PORT-3306}; do
+until nc -z ${APP_DB_HOST} ${APP_DB_PORT}; do
     echo "Waiting database on ${APP_DB_HOST}:${APP_DB_PORT}"
     sleep 2
 done
