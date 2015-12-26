@@ -108,5 +108,7 @@ else
     error "Can't build ${BASE_IMAGE_NAME}"
 fi
 
+note "For generate docker-compose.yml run: ${DIR}/make-compose-config.sh ${IMAGE_NAME} ${DOCKER_IMAGE_TAG}"
+
 # Cleanup
 rm -rf ${TMP_DIR}

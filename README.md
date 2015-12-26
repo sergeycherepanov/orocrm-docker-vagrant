@@ -58,10 +58,32 @@ Example:
 
 If all docker containers started without errors, you can see web installer here: [http://orocrm.loc](http://orocrm.loc)
 
-#### Mysql credentials for install:
-```
-host: db
-database: orocrm 
-user: orocrm 
-password: orocrm
-```
+### Default credentials:
+
+##### Application:
+
+user: `admin`  
+password: `admin1111`  
+email: `johndoe@example.com`  
+
+##### Database:
+
+host: `db`  
+database: `orocrm`  
+user: `orocrm`  
+password: `orocrm`  
+
+*You can change it in your docker-compose.yml*
+
+## Docker Container Features
+
+### Extend initialization
+
+Define custom initialize cummands
+
+Available variables:
+
+`CMD_INIT_BEFORE` - Command will be executed before initialization (or installation)  
+`CMD_INIT_CLEAN` - Command will be used if application not installed (here you can initiate installation via cli)
+`CMD_INIT_INSTALLED` - Command will be used for initialization of already installed application  
+`CMD_INIT_AFTER` - Command will be executed after initialization (or installation)  
