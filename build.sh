@@ -50,7 +50,7 @@ cd ${GIT_DIR}
 git init
 git remote add origin ${GIT_REPOSITORY_URI}
 
-if [ 0 -eq $(expr match "${GIT_REPOSITORY_BRANCH}" "tags/") ];then
+if [[ 0 -eq $(expr match "${GIT_REPOSITORY_BRANCH}" "tags/") ]];then
     git fetch origin ${GIT_REPOSITORY_BRANCH}
 else
     git fetch origin ${GIT_REPOSITORY_BRANCH}:${GIT_REPOSITORY_BRANCH}
@@ -66,7 +66,7 @@ git submodule update --init
 tar -xf ${TMP_DIR}/source.tar -C $(dirname ${SOURCE_DIR})
 
 # If is composer application
-if [ -f ${SOURCE_DIR}/composer.json ]; then
+if [[ -f ${SOURCE_DIR}/composer.json ]]; then
     composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader -d ${SOURCE_DIR} || error "Can't install dependencies"
 
     # Map environment variables
@@ -78,7 +78,7 @@ fi
 cd ${WORKING_DIR}
 
 # Data image
-if [ 0 -eq $(docker images | grep "${IMAGE_NAME}-data" | grep ${DOCKER_IMAGE_TAG} | wc -l) ]; then
+if [[ 0 -eq $(docker images | awk '{print $1 ":" $2}' | grep "^${IMAGE_NAME}-data:${DOCKER_IMAGE_TAG}$" | wc -l) ]]; then
     info "${IMAGE_NAME}-data:${DOCKER_IMAGE_TAG} image not found, building..."
     docker build -t "${IMAGE_NAME}-data:${DOCKER_IMAGE_TAG}" "${DIR}/image-data"
     [[ 0 -lt $? ]] && error "Can't build ${IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
@@ -89,7 +89,7 @@ else
 fi
 
 # Basy system
-if [ 0 -eq $(docker images | grep ${BASE_IMAGE_NAME} | wc -l) ]; then
+if [[ 0 -eq $(docker images | awk '{print $1}' | grep "^${BASE_IMAGE_NAME}$" | wc -l) ]]; then
     info "${BASE_IMAGE_NAME} image not found, building..."
     info "Building ${BASE_IMAGE_NAME} image"
     docker build -t "${BASE_IMAGE_NAME}" "${DIR}/image"
@@ -102,7 +102,7 @@ fi
 
 # Copy source code
 ID=$(docker run -d -v "${DIR}/image/OroRequirements.php:/OroRequirements.php" -v "${SOURCE_DIR}:/source" -v "${DIR}/image/bin:/optbin" "${BASE_IMAGE_NAME}" bash -c "cp -r /optbin /opt/bin && chmod +x /opt/bin/* && cp -r /source /var/www && cp /OroRequirements.php /var/www/app/OroRequirements.php && chown -R www-data:www-data /var/www")
-if [ 0 -eq $(docker wait ${ID}) ]; then
+if [[ 0 -eq $(docker wait ${ID}) ]]; then
     docker commit -c 'CMD ["/bin/bash", "/opt/bin/run.sh"]' ${ID} ${IMAGE_NAME}:${DOCKER_IMAGE_TAG}
 else
     error "Can't build ${BASE_IMAGE_NAME}"
