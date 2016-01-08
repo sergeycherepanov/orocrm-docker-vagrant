@@ -10,6 +10,7 @@ Install Vagrant from http://www.vagrantup.com/downloads
 
 Install Vagrant plugins:
 
+    vagrant plugin install vagrant-vbguest
     vagrant plugin install vagrant-hostmanager
 
 ## Usage

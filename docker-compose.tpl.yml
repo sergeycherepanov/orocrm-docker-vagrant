@@ -11,7 +11,7 @@ db:
 data:
   hostname: data
   image: %IMAGE_PREFIX%-data:%IMAGE_TAG%
-bap:
+web:
   hostname: bap
   image: %IMAGE_PREFIX%:%IMAGE_TAG%
   links:
