@@ -24,7 +24,7 @@ sudo sed -i -e "s/#\s\s\sStrictHostKeyChecking ask/StrictHostKeyChecking no/g" /
 # Setup php5 cli options
 sudo sed -i -e "s/;date.timezone\s=/date.timezone = UTC/g" /etc/php5/cli/php.ini
 sudo sed -i -e "s/short_open_tag\s=\s*.*/short_open_tag = Off/g" /etc/php5/cli/php.ini
-sudo sed -i -e "s/memory_limit\s=\s.*/memory_limit = 512M/g" /etc/php5/cli/php.ini
+sudo sed -i -e "s/memory_limit\s=\s.*/memory_limit = 3G/g" /etc/php5/cli/php.ini
 sudo sed -i -e "s/max_execution_time\s=\s.*/max_execution_time = 0/g" /etc/php5/cli/php.ini
 
 # Install composer
