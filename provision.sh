@@ -14,7 +14,7 @@ sudo apt-get -y update
 
 # Install php5
 sudo apt-get install -y unzip python-software-properties php5-dev php5-cli php5-mysql php5-curl php5-gd php5-mcrypt \
-php5-xmlrpc php5-xsl php5-common php5-intl php-pear
+php5-xmlrpc php5-xsl php5-common php5-intl php5-ldap php-pear
 
 sudo php5enmod mcrypt
 
