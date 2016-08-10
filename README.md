@@ -1,8 +1,7 @@
 # OroCRM Docker builder on Vagrant 
+## !> Automated docker builds [available here](https://github.com/djocker) <!
 
 ### Vagrant box for build and run a [BAP Application](http://www.orocrm.com/oro-platform) in [Docker](https://www.docker.com/) Container
-
-#### !!! Automated docker builds [available here](https://github.com/djocker) !!!
 
 ## Prepare Vagrant Environment
 
